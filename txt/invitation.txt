@@ -1,15 +1,33 @@
-Kære studerende ved XXY,
+Dette brev er sendt med den kursusansvarliges billigelse.
 
-Du er blevet udvalgt til at deltage i et forsøg omkring indlæring
-ifbm. programmering og hvordan denne påvirkes af sprogparadigme. Vi er
-særligt interesserede i dig grundet din deltagelse i kurset [KURSUS].
+
+Du er blevet udvalgt som forsøgsperson til et brugereksperiment og har
+nu en unik mulighed for at hjælpe et af forskningsprojekt under KU,
+der undersøger indlæringsprocessen ved programmering.
 
 Forsøget er på ingen måde farligt, intimiderende eller skræmmende. I
 værste tilfælde vil du blive udsat for [SPROG]-kode og dermed blive en
 smule bedre til [SPROG] :-)
 
+Samtidig vil din deltagelse bidrage med ny information, der kan hjælpe
+til at forbedre introduktionskurserne fremfor.
+
 Forsøget er anonymt. Ingen oplysninger der kan bruges til at koble
-resultater i testen til den enkelte studerende vil blive indsamlet.
+resultater fra forsøget til den enkelte studerende vil blive indsamlet.
+
+
+[HVORNÅR]
+Forsøget foregår i uge 42, hvor der vil blive afholdt forsøg både
+tirsdag og torsdag.
+
+
+[TILBAGEMELDING OG DEADLINE]
+Venligst afkryds hvilke dage og tider du kan deltage på følgende
+doodle:
+
+<< DOODLE >>
+
+Svar udbedes inden d. ##. oktober.
 
 
 [FORSØGET]
@@ -57,20 +75,6 @@ http://tinyurl.com/islands-brygge-metro
 
 
 Der bør beregnes cirka 30 minutters transport fra DIKU.
-
-
-[HVORNÅR]
-Forsøget foregår i uge 42, hvor der vil blive afholdt forsøg både
-tirsdag og torsdag.
-
-
-[TILBAGEMELDING OG DEADLINE]
-Venligst afkryds hvilke dage og tider du kan deltage på følgende
-doodle:
-
-<< DOODLE >>
-
-Svar udbedes inden d. ##. oktober.
 
 
 [KONTAKT]
