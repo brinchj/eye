@@ -1,0 +1,139 @@
+\documentclass[12pt,oneside,a4paper]{article}
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{lscape}
+\usepackage{multicol}
+%\usepackage{epic,eepic}
+\usepackage[pdftex]{graphicx}
+\usepackage{latexsym}
+\usepackage{charter}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[plain]{fancyref}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fixme}
+\usepackage[sort&compress]{natbib}
+%\bibpunct{(}{)}{,}{a}{}{}
+\setcitestyle{authoryear}
+
+
+%\usepackage{vmargin}
+%r\usepackage{sidecap}
+
+
+
+
+
+%\selectlanguage{danish}
+\lstset{language=Python,basicstyle=\small,
+  columns=fullflexible}
+
+%\setpapersize{A4}
+%\setmarginsrb{2.5cm}{1.5cm}{2.5cm}{2cm}{1cm}{.5cm}{2cm}{2cm}
+\DeclareGraphicsExtensions{.jpg, .eps, .png}
+
+% references
+
+
+% macros
+\newcommand{\p}{\ensuremath{^\prime}}
+
+
+\pagestyle{fancy}
+\begin{document}
+  \fontencoding{T1}
+  \fontfamily{cmbr}
+  \fontseries{m}
+  \fontshape{n}
+  \fontsize{12}{15}
+  \selectfont
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                    Forside
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter % open mode for reading @ signed variables
+\def\maketitle{%
+ \null
+ \thispagestyle{empty}%
+ \vfill
+ \begin{center}\leavevmode
+   \normalfont
+   \LARGE{\raggedleft \@title\par}%
+   \hrulefill\par
+   \large{\raggedright \subtitle\par}%
+   \vskip 2cm
+   {\@date\par}%
+ \end{center}%
+ \vfill
+ \begin{flushleft}
+   {\large \@author } \\
+   {\footnotesize \suplementInfo }
+ \end{flushleft}
+ % \cleardoublepage % lave 1 ekstre side blank efter
+ \clearpage % Terminates the page here. Everything else vil be placed on next page.
+}
+\makeatother % closing mode for reading @ signed variables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%               Data til forside
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Experimental Investigation of the Influence of Introductory
+  Programming Paradigm}
+\def\subtitle{HCC $\cdot$ Human-Centered Computing}
+\author{Johan Sejr Brinch Nielsen}
+\def\suplementInfo{
+
+\kern 5pt \hrule width 11pc \kern 5pt
+
+\begin{tabular}{ll}
+Email: & zerrez@diku.dk  \\
+Cpr.:  & 260886-2547 \\
+Supervisor: & Jakob G. Simonsen
+\end{tabular}
+
+% putter 5pt spacing oven over og neden under stregen
+\kern 5pt \hrule width 11pc \kern 5pt
+
+Dept. of Computer Science,  \\
+University of Copenhagen
+
+}
+
+%\date{} % used to set explicit dates<
+
+
+%\title{Statistical Analysis of Music Corpora}
+%\author{Johan Sejr Brinch Nielsen}
+\fancyhead[LO, LE] {\small \rightmark}
+\fancyhead[RO, RE] {\small CHAPTER \thechapter}
+
+\fancyfoot[LO, LE] {Exp. Investigation of the Influence \\of Intro.
+  Programming Paradigm}
+\fancyfoot[RO, RE] {Johan Sejr Brinch Nielsen\\ \today}
+
+\maketitle
+\newpage
+
+
+\input{sections/description}
+
+\input{sections/learning-goals}
+
+
+\newpage
+\bibliography{references}{}
+\bibliographystyle{plainnat}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
