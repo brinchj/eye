@@ -1,0 +1,84 @@
+Kære studerende ved XXY,
+
+Du er blevet udvalgt til at deltage i et forsøg omkring indlæring
+ifbm. programmering og hvordan denne påvirkes af sprogparadigme. Vi er
+særligt interesserede i dig grundet din deltagelse i kurset [KURSUS].
+
+Forsøget er på ingen måde farligt, intimiderende eller skræmmende. I
+værste tilfælde vil du blive udsat for [SPROG]-kode og dermed blive en
+smule bedre til [SPROG] :-)
+
+Forsøget er anonymt. Ingen oplysninger der kan bruges til at koble
+resultater i testen til den enkelte studerende vil blive indsamlet.
+
+
+[FORSØGET]
+
+Som deltager vil du blive stillet overfor nogle kortfattede opgaver i
+[SPROG] på niveau med hvad du har lært på [KURSUS]. En eyetracker vil
+følge dine øjenbevægelse, mens du læser [SPROG]-koden - og det er
+netop disse bevægelser der fokuseres på i projektet.
+
+(* Hvordan undgår man at skræmme den studerende, der nu er bange for
+at opgaverne er for svære?? *)
+
+Eye-trackeren er en stationær enhed, der kan måle øjenbevægelser på
+afstand, så der kræves hverken hjelm eller briller.
+
+Der kræves ingen forberedelse og forsøget tager cirka 1 time at
+gennemføre.
+
+
+[HVOR]
+
+Forsøgene bliver afholdt i Experience Lab, der er en afdeling under
+DIKU's HCC gruppe (Human Computer Interactions).
+
+Adressen for afdelingen er:
+Experience Lab,
+DIKUA (Datalogisk Institut ved KUA),
+Njalsgade 128,
+Bygning 24, 5. sal
+
+
+[TRANSPORT]
+
+Man kan med fordel benytte Islands Brygge metrostation, der ligger
+tæt på.
+
+KORT over området:
+http://tinyurl.com/dikua-kort
+
+KORT med bygning 24 og Experience Lab markeret:
+http://tinyurl.com/dikua-b24
+
+KORT med Islands Brygge metrostation markeret:
+http://tinyurl.com/islands-brygge-metro
+
+
+Der bør beregnes cirka 30 minutters transport fra DIKU.
+
+
+[HVORNÅR]
+Forsøget foregår i uge 42, hvor der vil blive afholdt forsøg både
+tirsdag og torsdag.
+
+
+[TILBAGEMELDING OG DEADLINE]
+Venligst afkryds hvilke dage og tider du kan deltage på følgende
+doodle:
+
+<< DOODLE >>
+
+Svar udbedes inden d. ##. oktober.
+
+
+[KONTAKT]
+Hvis du har spørgsmål, eller er nysgerrig efter mere information, så
+kontakt mig på:
+zerrez@diku.dk
+
+--
+Johan Brinch,
+Datalogisk Institut,
+Københavns Universitet
