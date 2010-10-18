@@ -7,14 +7,13 @@ import json, exceptions, session, sys, os, subprocess, shlex
 
 
 NEEDED = (
-    'age', 'sex', 'enrolled',
+    'age', 'isMale', 'isFemale', 'enrolled',
     'mainSubject',
     ) + tuple('did'+X for X in ('Python','SML','Ruby','PHP','Other','OtherWhat',
                                 'Java','C','HTML','Javascript')) + \
-    ('didYears', 'isNew', 'isSmall', 'isOK', 'isGood')
+    ('codeYears', 'codeExp')
 
 REQUIRED = (
-    ('sex', 'Køn'),
     ('mainSubject', 'Hovedfag'),
     )
 
@@ -25,7 +24,8 @@ def get_value(e):
     uni = lambda s: unicode(s, 'latin-1')
     methods = (('isChecked',str),
                ('currentText', uni),
-               ('text', uni))
+               ('text', uni),
+               ('value', str))
     for attr, method in methods:
         if hasattr(e, attr):
             return method(getattr(e, attr)())
