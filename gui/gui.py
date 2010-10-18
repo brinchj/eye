@@ -12,14 +12,11 @@ from dialog import MessageBox
 SESSION = None
 
 
-
-
-
 Q_NUM = 0
 def resume(qs):
     global Q_NUM
-    uuid = list(sorted(
-        glob.glob('%s/*-*' % session.SESSION_PATH), reverse=True))[0].split('/')[-1]
+    uuid = re.split(r'\\|/', list(sorted(
+        glob.glob('%s/*-*' % session.SESSION_PATH), reverse=True))[0])[-1]
     print uuid
     answers = sorted(filter(lambda n: 'old' not in n,
                             glob.glob('%s/%s/answer-*' % (session.SESSION_PATH, uuid))),

@@ -18,7 +18,11 @@ class Session:
         print key,value
         path = '%s/%s' % (self.path, key)
         if mode=='w' and os.path.isfile(path):
+            if os.path.isfile(path+'.old'):
+                os.rename(path+'.old', path+'.older')
             os.rename(path, path+'.old')
+            if os.path.isfile(path+'.older'):
+                os.unlink(path+'.older')
         file(path, mode).write(json.dumps(value)+'\n')
 
     def get(self, key):
