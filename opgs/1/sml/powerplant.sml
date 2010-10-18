@@ -154,7 +154,8 @@
        in
          case value of
            "" => ( print "No value.\n" ; ins )
-         |  s => add ins name (valOf (Int.fromString s))
+         |  s => add ins name (
+                 valOf (Int.fromString s))
        end
 
    fun change ins name =
@@ -162,8 +163,10 @@
          val value = raw_input "CHANGE value="
        in
          case value of
-           ""    => ( print "No value.\n" ; ins )
-         | "REM" => ( print "REMOVE\n" ; rem ins name )
+           ""    => ( print "No value.\n" ;
+                      ins )
+         | "REM" => ( print "REMOVE\n" ;
+                      rem ins name )
          |  s    => update ins name (
                     valOf (Int.fromString s))
        end
