@@ -1,10 +1,10 @@
 
  val instruments = [
-     ("Pressure",      10, true ),
-     ("Meter",         90, false),
-     ("Water-Level",   70, true ),
-     ("Frequency",     50, true ),
-     ("Alarm1",         0, true )
+   ("Pressure",      10, true ),
+   ("Meter",         90, false),
+   ("Water-Level",   70, true ),
+   ("Frequency",     50, true ),
+   ("Alarm1",         0, true )
  ]
  ;
 
@@ -12,7 +12,7 @@
 
  (* cons *)
  fun add ins name value =
-     (name, value, true)::ins
+   (name, value, true)::ins
  ;
 
  (* match, cons, if *)
@@ -80,9 +80,9 @@
 
  (* toString, concat *)
  fun elem_toString (a,b,c) =
-     "(" ^ a ^ "," ^
-      Int.toString b ^ "," ^
-     Bool.toString c ^ ")"
+   "(" ^ a ^ "," ^
+    Int.toString b ^ "," ^
+   Bool.toString c ^ ")"
  ;
 
  (* match, cons, concat *)
@@ -93,10 +93,10 @@
 
  (* concat *)
  fun diff_all ins0 ins1 =
-     "[" ^ ins_toString (diff ins0 ins1) ^
-     "] => " ^
-     "[" ^ ins_toString (diff ins1 ins0) ^
-     "]"
+   "[" ^ ins_toString (diff ins0 ins1) ^
+   "] => " ^
+   "[" ^ ins_toString (diff ins1 ins0) ^
+   "]"
  ;
 
  (* Print status report *)
@@ -104,31 +104,29 @@
  (* local, match, cons, concat, if, case, option, print, let *)
  local
    fun out ((a,b,c)::ins) =
-       let
-         val oper = if c then "Yes" else "No"
-         val s = a ^ ", " ^ Int.toString b ^
-                 ", " ^ oper
-       in
-         (s ^ "\n") ^ (out ins)
-       end
-     | out _ = ""
+     let
+       val oper = if c then "Yes" else "No"
+       val s = a ^ ", " ^ Int.toString b ^
+               ", " ^ oper
+     in
+       (s ^ "\n") ^ (out ins)
+     end
+   | out _ = ""
  in
  fun print_status ins =
-     let
-       val failed =
-           case first_failed ins of
-             NONE => ""
-           | SOME elem => elem_toString elem
-       val high = ins_toString (too_high ins)
-       val s =
-             "====\n" ^
-             "Name: Value: Operating:\n" ^
-             out ins ^
-             "\n" ^
-             "High:" ^ high ^ "\n" ^
-             "\n" ^
-             "Failed:" ^ failed ^ "\n" ^
-             "====\n"
+   let
+     val failed =
+         case first_failed ins of
+           NONE => ""
+         | SOME elem => elem_toString elem
+     val high = ins_toString (too_high ins)
+     val s =
+           "====\n" ^
+           "Name: Value: Operating:\n" ^
+           out ins ^ "\n" ^
+           "High:" ^ high ^ "\n\n" ^
+           "Failed:" ^ failed ^ "\n" ^
+           "====\n"
      in print s end
  end
  ;
@@ -138,59 +136,58 @@
  (* local, print, TextIO, case, if, let, valOf ; *)
  local
    fun strip_newline s =
-       String.substring (s, 0, String.size s - 1)
+     String.substring (s, 0, String.size s - 1)
 
    fun raw_input msg =
-       let
-         val _ = print msg
-         val l = TextIO.inputLine TextIO.stdIn
-       in
-         strip_newline l
-       end
+     let
+       val _ = print msg
+       val l = TextIO.inputLine TextIO.stdIn
+     in
+       strip_newline l
+     end
 
    fun add_new ins name =
-       let
-         val value = raw_input "INSERT value="
-       in
-         case value of
-           "" => ( print "No value.\n" ; ins )
-         |  s => add ins name (
-                 valOf (Int.fromString s))
-       end
+     let
+       val value = raw_input "INSERT value="
+     in
+       case value of
+         "" => ( print "No value.\n" ; ins )
+       |  s => add ins name (
+               valOf (Int.fromString s))
+     end
 
    fun change ins name =
-       let
-         val value = raw_input "CHANGE value="
-       in
-         case value of
-           ""    => ( print "No value.\n" ;
-                      ins )
-         | "REM" => ( print "REMOVE\n" ;
-                      rem ins name )
-         |  s    => update ins name (
-                    valOf (Int.fromString s))
-       end
+     let
+       val value = raw_input "CHANGE value="
+     in
+       case value of
+         ""    => ( print "No value.\n" ;
+                    ins )
+       | "REM" => ( print "REMOVE\n" ;
+                    rem ins name )
+       |  s    => update ins name (
+                  valOf (Int.fromString s))
+     end
  in
  fun updater ins =
-     let
-       val _ = print_status ins
-       val name = raw_input "> name="
-     in
-       if name = "quit"
-       then ins
+   let
+     val _ = print_status ins
+     val name = raw_input "> name="
+   in
+     if name = "quit"
+     then ins
+     else
+       if String.size name = 0
+       then (print "No name." ; updater ins)
        else
-         if String.size name = 0
-         then (print "No name." ; updater ins)
-         else
-           let
-             val ins_new =
-                 if not (has ins name)
-                 then add_new ins name
-                 else change  ins name
-             val  _ = print (
-                      diff_all ins ins_new ^ "\n")
-           in
-             updater ins_new
-           end
+         let
+           val ins_new =
+               if not (has ins name)
+               then add_new ins name
+               else change  ins name
+         in
+           (print (diff_all ins ins_new ^ "\n") ;
+            updater ins_new)
+         end
      end
  end
