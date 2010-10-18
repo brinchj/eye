@@ -20,12 +20,15 @@ class MainWindow(Ui_MainWindow):
 
 
 def resume(qs):
-    uuid = list(sorted(glob.glob('%s/*-*' % session.SESSION_PATH), reverse=True))[0].split('/')[-1]
+    uuid = list(sorted(
+        glob.glob('%s/*-*' % session.SESSION_PATH), reverse=True))[0].split('/')[-1]
     print uuid
     answers = sorted(filter(lambda n: 'old' not in n,
-                            glob.glob('%s/%s/answer-*' % (session.SESSION_PATH, uuid))), reverse=True)
+                            glob.glob('%s/%s/answer-*' % (session.SESSION_PATH, uuid))),
+                     reverse=True)
     if not answers:
-        return session.Session(), qs
+        ses = session.Session()
+        return session.Session(), qs, ''
     last = answers[0]
     n = int(os.path.basename(last).split('-')[1])
     ses = session.Session(uuid)
