@@ -1,0 +1,85 @@
+[
+
+    {
+        "question": "<b>Eksempel:</b><br/>Hvad er resultatet af at fortolke/køre udtrykket 'has instruments \"Meter\"'?<br/>",
+        "line": "^fun has",
+        "answer": "Der findes et element i instruments med navnet 'Meter', så 'has' vil returnere true."
+    },
+
+
+    {
+        "question": "Hvor mange elementer er der i listen 'instruments'?",
+        "line" : "^val instruments"
+    },
+    {
+        "question": "Hvad indeholder listen 'instruments' og hvad ser dens elementer ud til at beskrive?",
+        "line" : "^val instruments"
+    },
+
+
+
+    {
+        "question": "Hvad gør '::' i funktionen 'add'?",
+        "line" : "^fun add"
+    },
+    {
+        "question": "Hvordan bruges variablen 'a' i funktionen 'has'.",
+        "line" : "^fun has"
+    },
+    {
+        "question": "Hvad er resultatet af at fortolke/køre udtrykket 'add [] \"Speaker\" 0'?",
+        "line": "^fun add"
+    },
+
+
+
+    {
+        "question": "På hvilke linjenumre kan funktionen 'rem' terminere?",
+        "line": "^fun rem"
+    },
+    {
+        "question" : "Hvad indeholder variablen 'l' i funktionen 'rem'?",
+        "line" : "^fun rem"
+    },
+
+
+
+    {
+        "question" : "Hvad tester 'case' i funktionen 'update'?",
+        "line" : "^fun update"
+    },
+    {
+        "question" : "Hvad kendetegner de elementer som funktionen 'too_high' returnerer?",
+        "line" : "^fun too_high"
+    },
+
+
+
+    {
+        "question" : "Under hvilke forhold terminerer funktionen 'first_failed'?",
+        "line" : "^fun first_failed"
+    },
+    {
+        "question" : "Hvad returnerer funktionen 'too_high'?",
+        "line" : "^fun too_high"
+    },
+    {
+        "question" : "Hvad tester 'orelse' i funktionen 'contains'?",
+        "line" : "^fun contains"
+    },
+    {
+        "question" : "Hvilket formål har 'if not' i funktionen 'diff'?",
+        "line" : "^fun diff"
+    },
+
+
+    {
+        "question" : "Hvad gør funktionen 'raw_input'?",
+        "line" : "^fun raw_input"
+    },
+    {
+        "question" : "Forklar kortfattet funktionaliteten af 'updater'.",
+        "line" : "^fun updater"
+    }
+
+]
