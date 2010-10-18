@@ -1,8 +1,4 @@
 
-load "Int";
-load "String";
-load "Bool";
-
 val instruments = [
     ("Pressure",      10, true ),
     ("Meter",         90, false),
@@ -43,9 +39,9 @@ fun rem ((elem as (a,_,_))::ins) name =
 (* match, if *)
 fun update  [] _ _ = []
   | update ins name value =
-    if not (has ins name)
-    then ins
-    else add (rem ins name) name value
+    case not (has ins name) of
+      true => ins
+    | false => add (rem ins name) name value
 ;
 
 (* Check for failures *)
@@ -71,16 +67,14 @@ fun too_high [] = []
 (* match, cons, if, local *)
 local
   fun contains (elem1::ins) elem0 =
-      if elem0 = elem1
-      then true
-      else contains ins elem0
+      elem0 = elem1 orelse contains ins elem0
     | contains _ _ = false
 in
-fun diff (elem0::ins0) ins1 =
-    if contains ins1 elem0
-    then diff ins0 ins1
-    else elem0 :: (diff ins0 ins1)
-  | diff _ _ = []
+fun diff [] ins1 = []
+  | diff (elem0::ins0) ins1 =
+    if not (contains ins1 elem0)
+    then elem0 :: (diff ins0 ins1)
+    else diff ins0 ins1
 end
 ;
 
@@ -168,7 +162,8 @@ local
         case value of
           ""    => ( print "No value.\n" ; ins )
         | "REM" => ( print "REMOVE\n" ; rem ins name )
-        |  s    => update ins name (valOf (Int.fromString s))
+        |  s    => update ins name (
+                   valOf (Int.fromString s))
       end
 in
 fun updater ins =
@@ -187,7 +182,8 @@ fun updater ins =
                 if not (has ins name)
                 then add_new ins name
                 else change  ins name
-            val  _ = print (diff_all ins ins_new ^ "\n")
+            val  _ = print (
+                     diff_all ins ins_new ^ "\n")
           in
             updater ins_new
           end
