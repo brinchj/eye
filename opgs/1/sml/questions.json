@@ -1,7 +1,7 @@
 [
 
     {
-        "question": "<b>Eksempel:</b><br/>Hvad er resultatet af at fortolke/køre udtrykket:<br/>'has instruments \"Meter\"'?<br/>",
+        "question": "<b>Eksempel:</b><br/><br/>Hvad er resultatet af at fortolke/køre udtrykket:<br/><br/>'has instruments \"Meter\"'?<br/>",
         "line": "^fun has",
         "answer": "Der findes et element i instruments med navnet 'Meter', så 'has' vil returnere true."
     },
