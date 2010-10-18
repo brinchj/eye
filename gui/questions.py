@@ -7,7 +7,7 @@ HTML = unicode(\
 '''<br/>
 %s
 <br/><br/>
-Se funtionen på linje %i.
+Hints: Se linje %i.
 ''', 'utf-8')
 
 def to_html(code, qs):
@@ -17,11 +17,10 @@ def to_html(code, qs):
         r = q['line']
         # find line number
         line = re.compile(r)
-        print r
         match = filter(lambda l: line.match(l.strip()), code)[0]
         n = code.index(match)
         # generate html
-        yield HTML % (question, n)
+        yield (HTML % (question, n), 'answer' in q and q['answer'] or '')
 
 
 def load(code, path):

@@ -12,26 +12,24 @@ from dialog import MessageBox
 SESSION = None
 
 
-class MainWindow(Ui_MainWindow):
-    def __init__(self):
-        Ui_MainWindow.__init__(self)
-    def mouseMoveEvent(self, e):
-        print e
 
 
+
+Q_NUM = 0
 def resume(qs):
+    global Q_NUM
     uuid = list(sorted(
         glob.glob('%s/*-*' % session.SESSION_PATH), reverse=True))[0].split('/')[-1]
     print uuid
     answers = sorted(filter(lambda n: 'old' not in n,
                             glob.glob('%s/%s/answer-*' % (session.SESSION_PATH, uuid))),
                      reverse=True)
+    ses = session.Session(uuid)
     if not answers:
-        ses = session.Session()
-        return session.Session(), qs, ''
+        return ses, qs, ''
     last = answers[0]
     n = int(os.path.basename(last).split('-')[1])
-    ses = session.Session(uuid)
+    Q_NUM=n
     return ses, qs[n:], ses.get('answer-%i' % n)[1]
 
 
@@ -42,23 +40,31 @@ def load_question(path, n=0):
     </div></body></html>
     ''' % file(path).read().replace('\n','<br/>')
 
+def autosave(answer):
+    SESSION.store('answer-%i' % Q_NUM, (time.time(), unicode(answer.toPlainText())))
 
-Q_NUM = 0
+def autosaver(answer):
+    while True:
+        autosave(answer)
+        time.sleep(1)
+
 def make_changer(answer, txt, qs):
     def clicked(*args, **kwargs):
+        global Q_NUM
         if not (MessageBox().get_answer('Næste Spørgsmål?', 'Er du sikker på, at du vil gå videre?')):
             return
-        global Q_NUM
         print 'NEXT', Q_NUM
-        SESSION.store('answer-%i' % Q_NUM, (time.time(), unicode(answer.toPlainText())))
+        autosave(answer)
         time.sleep(.2)
         if not qs:
             MessageBox().show_msg('Færdig!', 'Du har nu gennemgået alle spørgsmål :-)\nApplikationen lukker!')
             app.closeAllWindows()
             sys.exit()
         txt.clear()
-        txt.appendHtml(qs.pop(0))
+        html,txtA = qs.pop(0)
+        txt.appendHtml(html)
         answer.clear()
+        answer.appendPlainText(txtA)
         Q_NUM += 1
     return clicked
 
@@ -85,7 +91,7 @@ def main():
     app = QtGui.QApplication([])
     widget = QtGui.QMainWindow()
     # Main Window
-    form = MainWindow()
+    form = Ui_MainWindow()
     form.setupUi(widget)
     form.txtSource.appendHtml(html.code_process_html(code_path+'.html'))
     # Scrollbar
@@ -97,18 +103,18 @@ def main():
     # Filters
     f = ScrollLogger(SESSION)
     s.installEventFilter(f)
-    m = MouseLogger(SESSION)
-    form.txtSource.installEventFilter(m)
     # Question
-    form.txtAssignment.appendHtml(qs.pop(0))
-    form.txtAnswer.appendPlainText(partialAnswer)
+    htmlQ,txtA = qs.pop(0)
+    form.txtAssignment.appendHtml(htmlQ)
+    form.txtAnswer.appendPlainText(partialAnswer or txtA)
     # Signals
     widget.connect(form.pushButton,
                    QtCore.SIGNAL('clicked()'),
                    make_changer(form.txtAnswer, form.txtAssignment, qs))
     # Show
     widget.show()
-    #widget.showFullScreen()
+    thread.start_new(autosaver, (form.txtAnswer,))
+    widget.showFullScreen()
 
 
 if __name__ == '__main__':

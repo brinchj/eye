@@ -15,6 +15,7 @@ class Session:
             os.mkdir(self.path)
 
     def store(self, key, value, mode='w'):
+        print key,value
         path = '%s/%s' % (self.path, key)
         if mode=='w' and os.path.isfile(path):
             os.rename(path, path+'.old')

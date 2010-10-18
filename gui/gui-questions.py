@@ -3,7 +3,7 @@
 from PyQt4 import QtGui, QtCore
 from models.questions import Ui_Form
 from dialog import MessageBox
-import json, exceptions, session, sys
+import json, exceptions, session, sys, os, subprocess, shlex
 
 
 NEEDED = (
@@ -49,7 +49,8 @@ def save():
         return
     SESSION.store('quest_answers', store())
     app.closeAllWindows()
-    sys.exit()
+    subprocess.Popen(shlex.split(
+        'python gui.py ../opgs/1/out/powerplant.sml ../opgs/1/sml/questions.json resume')).wait()
 
 def main():
     global app, widget, form
@@ -60,7 +61,8 @@ def main():
     widget.connect(form.pushButton,
                    QtCore.SIGNAL('clicked()'),
                    save)
-    widget.show()
+    widget.showFullScreen()
+    app.exec_()
 
 
 if __name__ == '__main__':
