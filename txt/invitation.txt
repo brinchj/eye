@@ -1,9 +1,14 @@
-Dette brev er sendt med den kursusansvarliges billigelse.
+TITEL:
+"Hjælp forskningen med at forstå undervisning i programmeringssprog --
+KORT VARSEL"
 
+BODY:
+Dette brev er sendt med den kursusansvarliges billigelse.
+===
 
 Du er blevet udvalgt som forsøgsperson til et brugereksperiment og har
-nu en unik mulighed for at hjælpe et af forskningsprojekt under KU,
-der undersøger indlæringsprocessen ved programmering.
+nu en unik mulighed for at hjælpe et forskningsprojekt under KU, der
+undersøger indlæringsprocessen ved programmering.
 
 Forsøget er på ingen måde farligt, intimiderende eller skræmmende. I
 værste tilfælde vil du blive udsat for [SPROG]-kode og dermed blive en
@@ -27,18 +32,15 @@ doodle:
 
 << DOODLE >>
 
-Svar udbedes inden d. ##. oktober.
+Svar udbedes inden d. 17. oktober.
 
 
 [FORSØGET]
 
 Som deltager vil du blive stillet overfor nogle kortfattede opgaver i
-[SPROG] på niveau med hvad du har lært på [KURSUS]. En eyetracker vil
+[SPROG] på niveau med hvad du har lært på [KURSUS]. En eye-tracker vil
 følge dine øjenbevægelse, mens du læser [SPROG]-koden - og det er
 netop disse bevægelser der fokuseres på i projektet.
-
-(* Hvordan undgår man at skræmme den studerende, der nu er bange for
-at opgaverne er for svære?? *)
 
 Eye-trackeren er en stationær enhed, der kan måle øjenbevægelser på
 afstand, så der kræves hverken hjelm eller briller.
@@ -50,7 +52,7 @@ gennemføre.
 [HVOR]
 
 Forsøgene bliver afholdt i Experience Lab, der er en afdeling under
-DIKU's HCC gruppe (Human Computer Interactions).
+DIKU's HCC gruppe (Human Computer Interaction).
 
 Adressen for afdelingen er:
 Experience Lab,
