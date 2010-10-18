@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main.ui'
 #
-# Created: Tue Oct  5 17:28:30 2010
+# Created: Mon Oct 18 16:57:10 2010
 #      by: PyQt4 UI code generator 4.7.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -32,8 +32,6 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtGui.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.horizontalLayout.addItem(spacerItem)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.txtSource = QtGui.QPlainTextEdit(self.centralwidget)
@@ -54,8 +52,8 @@ class Ui_MainWindow(object):
         self.txtSource.setReadOnly(True)
         self.txtSource.setObjectName("txtSource")
         self.horizontalLayout_2.addWidget(self.txtSource)
-        spacerItem1 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.horizontalLayout_2.addItem(spacerItem1)
+        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.horizontalLayout_2.addItem(spacerItem)
         self.horizontalLayout_2.setStretch(0, 2)
         self.horizontalLayout.addLayout(self.horizontalLayout_2)
         self.verticalLayout = QtGui.QVBoxLayout()
@@ -135,10 +133,8 @@ class Ui_MainWindow(object):
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout.addWidget(self.pushButton)
         self.horizontalLayout.addLayout(self.verticalLayout)
-        spacerItem2 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.horizontalLayout.addItem(spacerItem2)
-        self.horizontalLayout.setStretch(1, 3)
-        self.horizontalLayout.setStretch(2, 2)
+        self.horizontalLayout.setStretch(0, 3)
+        self.horizontalLayout.setStretch(1, 2)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
