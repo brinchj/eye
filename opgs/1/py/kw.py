@@ -8,7 +8,6 @@ code = '\n'.join( l for l in code.split('\n')
                   if len(l.strip()) == 0 or
                   not l.strip()[0] in ('#','"',"'") )
 
-
 sort = sorted(( (w, len(re.findall(r'[^\w]%s[^\w]' % w, code))) for w in words),
                 key=lambda p: -p[1])
 
