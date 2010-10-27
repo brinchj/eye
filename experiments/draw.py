@@ -1,4 +1,8 @@
-import Image, sys, time
+import math
+import sys
+import time
+from PIL import Image, ImageOps, ImageChops
+
 import experiment
 
 
@@ -11,21 +15,25 @@ def takeWhile(f,l):
         if not f(e): return
         yield e
 
-def drawPoint(img, X, Y, cx, cy):
-    R  = 25
-    R2 = R**2
-    for x in xrange(max(0,cx-R), min(X,cx+R)):
-        for y in xrange(max(0,cy-R), min(Y,cy+R)):
-            xd = (x-cx)**2
-            yd = (y-cy)**2
-            if not xd+yd <= R2:
+def newPoint(D):
+    R = D/2
+    img = Image.new('RGBA', (D,D), color='white')
+    for x in xrange(0, D):
+        for y in xrange(0, D):
+            dist = math.sqrt((x - R)**2 + (y - R)**2)
+            if dist > R:
+                # not inside cirle
                 continue
-            r,g,b = img[y*X+x]
-            q = 0.05*(1-((xd + yd)/float(R2)))
-            r = ((1-q)*r+q*255)
-            g = (1-q)*g
-            b = (1-q)*b
-            img[y*X+x] = (int(r),int(g),int(b))
+            q = dist / float(R)
+            g = b = int(q * 255)
+            img.putpixel((x,y), (255,g,b))
+    return img
+
+def drawPoint(img, point, (x, y)):
+    off = point.size[0]/2
+    box = (x - off, y - off, x + off, y + off)
+    crop = img.crop(box)
+    img.paste(ImageChops.multiply(crop, point), box)
 
 def test(code, exp, start=0, length=0):
     def lt(N):
@@ -36,10 +44,9 @@ def test(code, exp, start=0, length=0):
         return f
     list(takeWhile(lt(start), exp))
 
+    point = newPoint(24)
+
     X,Y = code.size
-    print time.time(), 'copy'
-    im = code.getdata()
-    il = zip(im.getband(0), im.getband(1), im.getband(2))
     print time.time(), 'draw'
     #m = [ [ pxs[x,y] for y in xrange(Y) ] for x in xrange(X) ]
     for i,line in enumerate(takeWhile(lt(start+length),exp)):
@@ -49,15 +56,13 @@ def test(code, exp, start=0, length=0):
         y = int(line['GazePointY']) - 9
         if 0 <= x < X and 0 <= y < Y:
             #print exp.get_time_absolute(t),x,y
-            drawPoint(il, X, Y, x, y)
+            drawPoint(code, point, (x,y))
         print i
-    print time.time(), 'put'
-    im.putdata(il)
     print time.time(), 'done'
 
 
 if __name__ == '__main__':
-    code = Image.open(sys.argv[1])
+    code = Image.open(sys.argv[1]).convert('RGBA')
     exp  = experiment.Experiment(sys.argv[2])
     test(code, exp, start=1287472298, length=10)
-    #code.show()
+    code.show()
