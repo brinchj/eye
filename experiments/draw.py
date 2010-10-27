@@ -42,7 +42,7 @@ def test(code, exp, start=0, length=0):
     il = zip(im.getband(0), im.getband(1), im.getband(2))
     print time.time(), 'draw'
     #m = [ [ pxs[x,y] for y in xrange(Y) ] for x in xrange(X) ]
-    for line in takeWhile(lt(start+length),exp):
+    for i,line in enumerate(takeWhile(lt(start+length),exp)):
         if not line['GazePointX']: continue
         t = float(line['Timestamp'])/1000
         x = int(line['GazePointX']) - 9
@@ -50,6 +50,7 @@ def test(code, exp, start=0, length=0):
         if 0 <= x < X and 0 <= y < Y:
             #print exp.get_time_absolute(t),x,y
             drawPoint(il, X, Y, x, y)
+        print i
     print time.time(), 'put'
     im.putdata(il)
     print time.time(), 'done'
