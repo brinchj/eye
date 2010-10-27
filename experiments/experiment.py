@@ -4,23 +4,23 @@ import csv, time
 DATE_FORMAT = '%m/%d/%Y %H:%M:%S %p'
 
 class Experiment:
-    def __init__(self, path):
+    def __init__(self, eyePath):
         self.info = {}
-        self.csv = csv.reader(file(path), csv.excel_tab)
-        for line in self.csv:
+        self.eyeCsv = csv.reader(file(eyePath), csv.excel_tab)
+        for line in self.eyeCsv:
             if len(line) > 10:
                 break
             if len(line) == 2:
                 n,v = line
                 self.info[n.strip(' :')] = v.strip()
         self.headers = line
-        self.rec_start = self.get_rec_start()
+        self.recStart = self.get_rec_start()
 
     def __iter__(self):
         return self
 
-    def next(self,i=0):
-        line = self.csv.next()
+    def next(self, i=0):
+        line = self.eyeCsv.next()
         if not line:
             raise StopIteration()
         return dict(zip(self.headers, line))
@@ -32,4 +32,4 @@ class Experiment:
                                          DATE_FORMAT))
 
     def get_time_absolute(self, offset):
-        return self.rec_start + offset
+        return self.recStart + offset
