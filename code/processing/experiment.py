@@ -1,3 +1,8 @@
+'''
+This module includes classes for representing and manipulating
+experiment and eye-position data.
+'''
+
 import bisect
 import csv
 import json
@@ -8,29 +13,38 @@ DATE_FORMAT = '%m/%d/%Y %H:%M:%S %p'
 
 
 class EyePosition:
+    ''' Represents one eye position sample '''
+
     def __init__(self, exp, **kwargs):
         self.raw = kwargs
         self.exp = exp
 
-        self.timestamp_rel = float(self.raw['Timestamp']) / 1000
-        self.timestamp_abs = exp.recStart + self.timestamp_rel
-
+        self.timestamp_rel = self.get(Timestamp=float) / 1000
+        self.timestamp_abs = exp.start_time + self.timestamp_rel
 
     def timestamp_relative(self):
+        ''' Timestamp relative to start of experiment '''
         return self.timestamp_rel
 
     def timestamp(self):
+        ''' Timestamp relative to Epoch '''
         return self.timestamp_abs
 
-    def x(self):
+    def pos_x(self):
+        ''' X-position '''
         return self.get(GazePointX=int)
 
-    def y(self):
+    def pos_y(self):
+        ''' Y-position '''
         return self.get(GazePointY=int)
 
     def get(self, **kwargs):
+        '''
+        Get raw property with type-casting (for internal use only)
+        Example: get(Timestamp=float) => float(raw["Timestamp"])
+        '''
         if len(kwargs) != 1:
-            raise ArgumentError("Only 1 argument supported: " + kwargs)
+            raise TypeError("Only 1 argument supported: " + kwargs)
         name = kwargs.keys()[0]
         if not name in self.raw or self.raw[name] == '':
             return None
@@ -38,61 +52,73 @@ class EyePosition:
 
 
 class Experiment:
-    def __init__(self, eyePath, scrollPath):
-        self.info = {}
-        self.eyeCsv = None
-        self.scrollTime = None
-        self.scrollPos  = None
+    '''
+    Represents a single experiment, including eye-tracking data
+    and scrollbar position.
 
-        self.load_eye_csv(eyePath)
-        self.load_scroll_log(scrollPath)
+    Iterating an Experiment instance yields EyePosition instances.
+    '''
 
-    def load_eye_csv(self, eyePath):
-        """ Load a csv log of eye positions """
-        self.eyeCsv = csv.reader(file(eyePath), csv.excel_tab)
-        # read info lines
-        for line in self.eyeCsv:
+    def __init__(self, eye_path, scroll_path):
+        self.scroll_time, self.scroll_pos = self.load_scroll_log(scroll_path)
+
+        self.load_scroll_log(scroll_path)
+        self.info, self.headers, self.eye_csv = self.load_eye_csv(eye_path)
+
+        self.start_time = self.get_start()
+
+    @staticmethod
+    def load_eye_csv(eye_path):
+        ''' Load a csv log of eye positions '''
+        # Open file
+        eye_csv = csv.reader(file(eye_path), csv.excel_tab)
+        # Read info lines
+        info = {}
+        line = None
+        for line in eye_csv:
             if len(line) > 10:
                 # no more info
                 break
             if len(line) == 2:
-                n,v = line
-                self.info[n.strip(' :')] = v.strip()
-        self.headers = line
-        self.recStart = self.get_rec_start()
+                name, value = line
+                info[name.strip(' :')] = value.strip()
+        # Did we get any?
+        if info == {} or line == None:
+            raise IOError('Could not parse: ' + eye_path)
+        # Output triple
+        return info, line, eye_csv
 
-    def load_scroll_log(self, scrollPath):
-        """ Load a log of scrollbar positions """
-        lst = re.findall(r'[^\r\n]+', file(scrollPath).read())
+    @staticmethod
+    def load_scroll_log(scroll_path):
+        ''' Load a log of scrollbar positions '''
+        lst = re.findall(r'[^\r\n]+', file(scroll_path).read())
         # convert list of lines to one list
-        log = reduce(lambda lst,s: lst + json.loads(s), lst, [])
+        log = reduce(lambda lst, s: lst + json.loads(s), lst, [])
         # unzip [[time,pos],...] => [[time,...], [pos,...]]
-        time, pos = zip(*sorted(log))
-        # update self
-        self.scrollTime = time
-        self.scrollPos  = pos
+        return zip(*sorted(log))
 
-
-    def scroll_pos(self, ts, start=0):
-        idx = bisect.bisect(self.scrollTime, ts, lo=start)
+    def get_scrollbar_pos(self, timestamp, start=0):
+        ''' Retrieve scrollbar position at given timestamp '''
+        idx = bisect.bisect(self.scroll_time, timestamp, lo=start)
         if idx == 0:
-            raise ValueError(ts)
-        return self.scrollPos[idx-1]
+            raise ValueError(timestamp)
+        return self.scroll_pos[idx - 1]
 
     def __iter__(self):
         return self
 
-    def next(self, i=0):
-        line = self.eyeCsv.next()
-        if not line:
-            raise StopIteration()
-        return EyePosition(self, **dict(zip(self.headers, line)))
+    def next(self):
+        ''' Return next element (used for iteration) '''
+        return EyePosition(self, **dict(zip(self.headers,
+                                            self.eye_csv.next())))
 
-    def get_rec_start(self):
+    def get_start(self):
+        ''' Start time of experiment '''
         rdate = self.info['Recording date']
         rtime = self.info['Recording time']
         return time.mktime(time.strptime('%s %s' % (rdate, rtime),
                                          DATE_FORMAT))
 
-    def time_absolute(self, offset):
-        return self.recStart + offset
+    def offset_to_timestamp(self, offset):
+        ''' Convert offset from experiment start to absolute timestamp '''
+        return self.start_time + offset
