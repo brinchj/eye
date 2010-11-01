@@ -1,7 +1,5 @@
 import math
 import sys
-#import time
-#import json
 from PIL import Image, ImageChops
 
 from experiment import Experiment
