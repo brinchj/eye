@@ -30,13 +30,16 @@ class EyePosition:
         ''' Timestamp relative to Epoch '''
         return self.timestamp_abs
 
-    def pos_x(self):
-        ''' X-position '''
-        return self.get(GazePointX=int)
-
-    def pos_y(self):
-        ''' Y-position '''
-        return self.get(GazePointY=int)
+    def pos(self):
+        ''' Position (x,y) '''
+        # Extract x,y
+        x = self.get(GazePointX=int)
+        y = self.get(GazePointY=int)
+        if None in (x, y):
+            return None
+        # Compensate for screen/window offset
+        offset_x, offset_y = self.exp.offset
+        return (x - offset_x, y - offset_y)
 
     def get(self, **kwargs):
         '''
@@ -59,13 +62,15 @@ class Experiment:
     Iterating an Experiment instance yields EyePosition instances.
     '''
 
-    def __init__(self, eye_path, scroll_path):
+    def __init__(self, eye_path, scroll_path, offset=(0, 0)):
         self.scroll_time, self.scroll_pos = self.load_scroll_log(scroll_path)
 
         self.load_scroll_log(scroll_path)
         self.info, self.headers, self.eye_csv = self.load_eye_csv(eye_path)
 
         self.start_time = self.get_start()
+
+        self.offset = offset
 
     @staticmethod
     def load_eye_csv(eye_path):

@@ -1,29 +1,11 @@
 import math
-import sys
 from PIL import Image, ImageChops
 
-from experiment import Experiment
-
-
-def take(count, lst):
-    ''' Take the first count elements of iterable lst '''
-    for i, elem in enumerate(lst):
-        if i == count:
-            return
-        yield elem
-
-
-def takeWhile(fun, lst):
-    ''' Take until fun(elem) == False '''
-    for elem in lst:
-        if not fun(elem):
-            return
-        yield elem
 
 POINT_INTENSITY = 8
 
 
-def newPoint(D):
+def new_point(D):
     ''' Generate a point overlay '''
     R = D / 2
     img = Image.new('RGBA', (D, D), color='white')
@@ -40,7 +22,7 @@ def newPoint(D):
     return img
 
 
-def drawPoint(img, point, (x, y)):
+def draw_point(img, point, (x, y)):
     ''' Draw a point overlay onto an image at position (x,y) '''
     off = point.size[0] / 2
     box = (x - off, y - off, x + off, y + off)
@@ -48,40 +30,20 @@ def drawPoint(img, point, (x, y)):
     img.paste(ImageChops.multiply(crop, point), box)
 
 
-LINE_HEIGHT = 23  # pixels
-
-
-def test(code, exp, start, length):
+def draw_points(code, exp, start, length, line_height=23):
     ''' Generate a test heatmap '''
-
-    list(takeWhile(lambda e: e.timestamp() < start, exp))
-
-    point = newPoint(16)
-    pointCount = 0
-
-    X, Y = code.size
-    for eye in takeWhile(lambda elem: elem.timestamp() < (start + length),
-                         exp):
-        if eye.pos_x() == None:
+    xs, ys = code.size
+    point = new_point(16)
+    # Extract interval (start; start+length)
+    interval = (elem for elem in exp
+                if start < elem.timestamp() < start + length
+                and elem.pos() != None)
+    # Plot eye positions in interval
+    for eye in interval:
+        x, y = eye.pos()
+        if not 0 <= x < xs or not 0 <= y < ys:
             continue
-        t = eye.timestamp()
-        x = eye.pos_x() - 9
-        y = eye.pos_y() - 9
-        scroll_pos = exp.get_scrollbar_pos(t)
-        if 0 <= x < X and 0 <= y < Y:
-            pointCount += 1
-            drawPoint(code, point, (x, scroll_pos * LINE_HEIGHT + y))
-    print 'points:', pointCount
-
-
-def main():
-    if len(sys.argv) != 4:
-        print 'Usage: %s code.png eye.csv scroll.log' % sys.argv[0]
-        sys.exit()
-    code = Image.open(sys.argv[1]).convert('RGBA')
-    exp = Experiment(sys.argv[2], sys.argv[3])
-    test(code, exp, 1287472092.9, 3600)
-    code.save('out/output.png')
-
-if __name__ == '__main__':
-    main()
+        scroll_pos = exp.get_scrollbar_pos(eye.timestamp())
+        offset_y = scroll_pos * line_height
+        draw_point(code, point, (x, y + offset_y))
+    return code
