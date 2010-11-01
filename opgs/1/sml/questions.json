@@ -38,7 +38,7 @@
         "line": "^fun rem"
     },
     {
-        "question" : "Hvad indeholder variablen 'l' i funktionen 'rem'?",
+        "question" : "Hvad indeholder variablen 'k' i funktionen 'rem'?",
         "line" : "^fun rem"
     },
 

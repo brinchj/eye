@@ -29,9 +29,9 @@
      then ins
      else
        let
-         val l = rem ins name
+         val k = rem ins name
        in
-         elem :: l
+         elem :: k
        end
    | rem _ _ = []
  ;
@@ -141,9 +141,9 @@
    fun raw_input msg =
      let
        val _ = print msg
-       val l = TextIO.inputLine TextIO.stdIn
+       val s = TextIO.inputLine TextIO.stdIn
      in
-       strip_newline l
+       strip_newline s
      end
 
    fun add_new ins name =
