@@ -1,6 +1,7 @@
 import math
 import sys
 import time
+import json
 from PIL import Image, ImageOps, ImageChops
 
 import experiment
@@ -15,6 +16,7 @@ def takeWhile(f,l):
         if not f(e): return
         yield e
 
+POINT_INTENSITY = 8
 def newPoint(D):
     R = D/2
     img = Image.new('RGBA', (D,D), color='white')
@@ -25,7 +27,7 @@ def newPoint(D):
                 # not inside cirle
                 continue
             q = dist / float(R)
-            g = b = int(q * 255)
+            g = b = int(q * POINT_INTENSITY) + (255 - POINT_INTENSITY)
             img.putpixel((x,y), (255,g,b))
     return img
 
@@ -35,34 +37,32 @@ def drawPoint(img, point, (x, y)):
     crop = img.crop(box)
     img.paste(ImageChops.multiply(crop, point), box)
 
-def test(code, exp, start=0, length=0):
+LINE_HEIGHT = 23 # pixels
+def test(code, exp, start, length):
     def lt(N):
         def f(e):
-            t = float(e['Timestamp'])/1000
-            t = exp.get_time_absolute(t)
-            return t < N
+            return e.timestamp() < N
         return f
     list(takeWhile(lt(start), exp))
 
-    point = newPoint(24)
+    point = newPoint(16)
+    pointCount = 0
 
     X,Y = code.size
-    print time.time(), 'draw'
-    #m = [ [ pxs[x,y] for y in xrange(Y) ] for x in xrange(X) ]
-    for i,line in enumerate(takeWhile(lt(start+length),exp)):
-        if not line['GazePointX']: continue
-        t = float(line['Timestamp'])/1000
-        x = int(line['GazePointX']) - 9
-        y = int(line['GazePointY']) - 9
+    for i,eye in enumerate(takeWhile(lt(start+length),exp)):
+        if eye.x() == None:
+            continue
+        t = eye.timestamp()
+        x = eye.x() - 9
+        y = eye.y() - 9
+        scrollPos = exp.scroll_pos(t)
         if 0 <= x < X and 0 <= y < Y:
-            #print exp.get_time_absolute(t),x,y
-            drawPoint(code, point, (x,y))
-        print i
-    print time.time(), 'done'
-
+            pointCount += 1
+            drawPoint(code, point, (x,scrollPos*LINE_HEIGHT + y))
+    print 'points:', pointCount
 
 if __name__ == '__main__':
     code = Image.open(sys.argv[1]).convert('RGBA')
-    exp  = experiment.Experiment(sys.argv[2])
-    test(code, exp, start=1287472298, length=10)
-    code.show()
+    exp  = experiment.Experiment(sys.argv[2], sys.argv[3])
+    test(code, exp, 1287472092.9, 3600)
+    code.save('out/output.png')
