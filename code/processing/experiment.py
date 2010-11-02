@@ -9,17 +9,30 @@ import json
 import re
 import time
 
+from types import NoneType
+from decorators import accepts, returns
+
 DATE_FORMAT = '%m/%d/%Y %H:%M:%S %p'
 
 
 class EyePosition:
     ''' Represents one eye position sample '''
 
-    def __init__(self, exp, **kwargs):
-        self.raw = kwargs
-        self.exp = exp
+    _attributes = {
+        'timestamp_rel': ('Timestamp', lambda t: float(t) / 1000),
+        'pos_x': ('GazePointX', int),
+        'pos_y': ('GazePointY', int),
+        }
 
-        self.timestamp_rel = self.get(Timestamp=float) / 1000
+    def __init__(self, exp, **kwargs):
+        # Set local attributes
+        for name, (key, fun) in EyePosition._attributes.items():
+            value = None
+            if key in kwargs and len(kwargs[key]) > 0:
+                value = fun(kwargs[key])
+            setattr(self, name, value)
+        # Keep reference to experiment
+        self.exp = exp
         self.timestamp_abs = exp.start_time + self.timestamp_rel
 
     def timestamp_relative(self):
@@ -33,25 +46,13 @@ class EyePosition:
     def pos(self):
         ''' Position (x,y) '''
         # Extract x,y
-        x = self.get(GazePointX=int)
-        y = self.get(GazePointY=int)
+        x = self.pos_x
+        y = self.pos_y
         if None in (x, y):
             return None
         # Compensate for screen/window offset
         offset_x, offset_y = self.exp.offset
         return (x - offset_x, y - offset_y)
-
-    def get(self, **kwargs):
-        '''
-        Get raw property with type-casting (for internal use only)
-        Example: get(Timestamp=float) => float(raw["Timestamp"])
-        '''
-        if len(kwargs) != 1:
-            raise TypeError("Only 1 argument supported: " + kwargs)
-        name = kwargs.keys()[0]
-        if not name in self.raw or self.raw[name] == '':
-            return None
-        return kwargs[name](self.raw[name])
 
 
 class Experiment:
@@ -73,6 +74,7 @@ class Experiment:
         self.offset = offset
 
     @staticmethod
+    @accepts(str)
     def load_eye_csv(eye_path):
         ''' Load a csv log of eye positions '''
         # Open file
@@ -94,6 +96,7 @@ class Experiment:
         return info, line, eye_csv
 
     @staticmethod
+    @accepts(str)
     def load_scroll_log(scroll_path):
         ''' Load a log of scrollbar positions '''
         lst = re.findall(r'[^\r\n]+', file(scroll_path).read())
@@ -102,6 +105,7 @@ class Experiment:
         # unzip [[time,pos],...] => [[time,...], [pos,...]]
         return zip(*sorted(log))
 
+    @accepts(object, (int, float))
     def get_scrollbar_pos(self, timestamp, start=0):
         ''' Retrieve scrollbar position at given timestamp '''
         idx = bisect.bisect(self.scroll_time, timestamp, lo=start)
@@ -124,6 +128,21 @@ class Experiment:
         return time.mktime(time.strptime('%s %s' % (rdate, rtime),
                                          DATE_FORMAT))
 
+    @accepts(object, int)
     def offset_to_timestamp(self, offset):
         ''' Convert offset from experiment start to absolute timestamp '''
         return self.start_time + offset
+
+    @accepts(object, int, int)
+    def interval(self, start, length):
+        ''' Return an time-slice interval of eye-positions '''
+        # generator for requested interval
+        def generate():
+            for elem in self:
+                ts = elem.timestamp()
+                if ts > start + length:
+                    raise StopIteration
+                if start < ts and elem.pos() != None:
+                    yield elem
+        # return interval generator
+        return generate()
