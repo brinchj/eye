@@ -75,11 +75,11 @@ class Experiment:
         '''
         self.exp_path = exp_path
 
-        scroll_path = glob('%s/%s' % (exp_path, self.SCROLL_PATH))[0]
-        self.set_scroll_path(scroll_path)
+        scroll_paths = glob('%s/%s' % (exp_path, self.SCROLL_PATH))
+        self.set_scroll_path(scroll_paths and scroll_paths[0] or None)
 
         eye_paths = glob('%s/%s' % (exp_path, self.EYE_PATH))
-        self.set_eye_path(eye_paths and eye_paths[0] or None)
+        self.set_eye_path(eye_paths[0])
 
         self.start_time = self.get_start()
         self.offset = offset

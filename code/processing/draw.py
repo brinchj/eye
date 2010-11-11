@@ -58,6 +58,7 @@ def draw_points(code, exp, start, length,
     # Start in upper left corner
     base_x = base_y = -group_size
     base_t = start
+    last_p = 0
     for eye in exp.interval(start, length):
         x, y = eye.pos()
         if not 0 <= x < xs or not 0 <= y < ys:
