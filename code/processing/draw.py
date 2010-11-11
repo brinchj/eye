@@ -24,7 +24,7 @@ def new_point(D, intensity=POINT_INTENSITY, color=DEFAULT_COLOR):
             if dist > R:
                 # not inside cirle
                 continue
-            q = 0 #(dist / float(R))
+            q = 0
             g = int(q * intensity * color + (255 - intensity * color))
             b = int(q * intensity + (255 - intensity))
             img.putpixel((x, y), (255, g, b))
@@ -53,9 +53,9 @@ def distance((x0, y0), (x1, y1)):
 @returns(Image.Image)
 def draw_points(code, exp, start, length,
                 line_height=23, group_size=0, start_diameter=DEFAULT_DIAMETER):
-    ''' Generate a heatmap '''
-    # Plot eye positions in interval
+    ''' Generate a heatmap, grouped by group_size pixels '''
     xs, ys = code.size
+    # Start in upper left corner
     base_x = base_y = -group_size
     base_t = start
     for eye in exp.interval(start, length):
@@ -64,7 +64,8 @@ def draw_points(code, exp, start, length,
             continue
         scroll_pos = exp.get_scrollbar_pos(eye.timestamp())
         y += scroll_pos * line_height
-        if not distance((x, y), (base_x, base_y)) <= group_size:
+        # Still inside group?
+        if distance((x, y), (base_x, base_y)) > group_size:
             time_span = eye.timestamp() - base_t
             draw_point(code, new_point(group_size, color=time_span / 5),
                        (base_x, base_y))
