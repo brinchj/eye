@@ -9,6 +9,7 @@ import json
 import re
 import time
 
+from glob import glob
 from decorators import accepts
 
 DATE_FORMAT = '%m/%d/%Y %H:%M:%S %p'
@@ -56,21 +57,40 @@ class EyePosition:
 
 class Experiment:
     '''
-    Represents a single experiment, including eye-tracking data
-    and scrollbar position.
+    Represents a single experiment, including eye-tracking data,
+    assignments and scrollbar position.
 
     Iterating an Experiment instance yields EyePosition instances.
     '''
 
-    def __init__(self, eye_path, scroll_path, offset=(0, 0)):
-        self.scroll_time, self.scroll_pos = self.load_scroll_log(scroll_path)
+    EYE_PATH = '*.tsv'
+    SCROLL_PATH = 'session/scroll.log'
 
-        self.load_scroll_log(scroll_path)
-        self.info, self.headers, self.eye_csv = self.load_eye_csv(eye_path)
+    def __init__(self, exp_path, offset=(0, 0)):
+        '''
+        Create a new experiment given an experiment data-folder
+        The folder can contain:
+        1) a *.tsv file with eye-tracking data (REQUIRED)
+        2) a session/scroll.log file with scrollbar positions
+        '''
+        scroll_path = glob('%s/%s' % (exp_path, self.SCROLL_PATH))[0]
+        self.set_scroll_path(scroll_path)
+
+        eye_paths = glob('%s/%s' % (exp_path, self.EYE_PATH))
+        self.set_eye_path(eye_paths and eye_paths[0] or None)
 
         self.start_time = self.get_start()
-
         self.offset = offset
+
+    def set_eye_path(self, path):
+        ''' Set path to eye-tracking csv output file '''
+        self.eye_path = path
+        self.info, self.headers, self.eye_csv = self.load_eye_csv(path)
+
+    def set_scroll_path(self, path):
+        ''' Set path to scroll bar positions '''
+        self.scroll_path = path
+        self.scroll_time, self.scroll_pos = self.load_scroll_log(path)
 
     @staticmethod
     @accepts(str)
@@ -96,8 +116,10 @@ class Experiment:
 
     @staticmethod
     @accepts(str)
-    def load_scroll_log(scroll_path):
+    def load_scroll_log(scroll_path=None):
         ''' Load a log of scrollbar positions '''
+        if scroll_path == None:
+            return [[0], [0]]
         lst = re.findall(r'[^\r\n]+', file(scroll_path).read())
         # convert list of lines to one list
         log = reduce(lambda lst, s: lst + json.loads(s), lst, [])
@@ -134,7 +156,7 @@ class Experiment:
 
     @accepts(object, int, int)
     def interval(self, start, length):
-        ''' Return an time-slice interval of eye-positions '''
+        ''' Return a time-slice interval of eye-positions '''
         # generator for requested interval
         def generate():
             for elem in self:
