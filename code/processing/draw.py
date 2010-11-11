@@ -68,8 +68,13 @@ def draw_points(code, exp, start, length,
         # Still inside group?
         if distance((x, y), (base_x, base_y)) > group_size:
             time_span = eye.timestamp() - base_t
-            draw_point(code, new_point(group_size, color=time_span / 5),
+            draw_point(code, new_point(group_size),
                        (base_x, base_y))
             (base_x, base_y) = (x, y)
             base_t = eye.timestamp()
+        # output progress
+        p = int((eye.timestamp() - start) * 100 / length)
+        if p - last_p >= 10 and p != last_p:
+            print p, '%'
+            last_p = p
     return code
