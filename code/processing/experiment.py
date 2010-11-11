@@ -9,8 +9,7 @@ import json
 import re
 import time
 
-from types import NoneType
-from decorators import accepts, returns
+from decorators import accepts
 
 DATE_FORMAT = '%m/%d/%Y %H:%M:%S %p'
 
