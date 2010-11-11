@@ -73,6 +73,8 @@ class Experiment:
         1) a *.tsv file with eye-tracking data (REQUIRED)
         2) a session/scroll.log file with scrollbar positions
         '''
+        self.exp_path = exp_path
+
         scroll_path = glob('%s/%s' % (exp_path, self.SCROLL_PATH))[0]
         self.set_scroll_path(scroll_path)
 
