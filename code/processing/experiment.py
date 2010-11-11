@@ -12,7 +12,7 @@ import time
 from glob import glob
 from decorators import accepts
 
-DATE_FORMAT = '%m/%d/%Y %H:%M:%S %p'
+DATE_FORMAT = '%m/%d/%Y %I:%M:%S %p'
 
 
 class EyePosition:
