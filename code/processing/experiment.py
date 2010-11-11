@@ -63,7 +63,7 @@ class Experiment:
     Iterating an Experiment instance yields EyePosition instances.
     '''
 
-    EYE_PATH = '*.tsv'
+    EYE_PATH = '*All-Data.tsv'
     SCROLL_PATH = 'session/scroll.log'
 
     def __init__(self, exp_path, offset=(0, 0)):
